@@ -1,0 +1,16 @@
+SELECT
+    categories.name AS CategoryName, courses.fullname AS CourseName,
+    CONCAT(users.firstname, " ", users.lastname) AS StudentName,
+    assignments.name AS AssignmentName, grades.grade,
+    FROM_UNIXTIME(grades.timemodified) AS GradeSubmitted
+FROM mdl_course_categories categories
+LEFT JOIN mdl_course courses ON categories.id = courses.category
+LEFT JOIN mdl_assign assignments ON assignments.course = courses.id
+LEFT JOIN mdl_assign_grades grades ON assignments.id = grades.assignment
+LEFT JOIN mdl_user users ON grades.userid = users.id
+WHERE
+    categories.name LIKE "%Replace With Category Name%"
+    AND grades.grade != -1
+    AND courses.fullname LIKE "%Replace With Course Name%"
+    AND FROM_UNIXTIME(grades.timemodified)
+        BETWEEN "2019-01-01 00:00:00" AND "2020-01-01 00:00:00"
